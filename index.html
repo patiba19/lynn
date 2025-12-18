@@ -26,141 +26,64 @@ body{
   justify-content:center;
   text-align:center;
   overflow:hidden;
-  animation: pageFade 1.2s ease forwards;
 }
 
-@keyframes pageFade{
-  from{ opacity:0; }
-  to{ opacity:1; }
-}
-
-/* --- Bäume --- */
-.trees{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:120px;
-  opacity:.15;
-  pointer-events:none;
-}
-.tree{
-  position:absolute;
-  bottom:0;
-  width:0; height:0;
-  border-left:18px solid transparent;
-  border-right:18px solid transparent;
-  border-bottom:36px solid var(--green);
-}
-.tree.small{
-  border-left:12px solid transparent;
-  border-right:12px solid transparent;
-  border-bottom:26px solid #9c5a22;
-}
-.tree.t1{ left:12%; }
-.tree.t2{ left:26%; }
-.tree.t3{ left:40%; }
-.tree.t4{ left:55%; }
-.tree.t5{ left:70%; }
-.tree.t6{ left:85%; }
-
-/* --- Container --- */
 .container{
   width:100%;
   max-width:520px;
   padding:80px 24px 120px;
-  position:relative;
-  z-index:1;
 }
 
-/* --- Headline --- */
 h1{
   font-family:'Playfair Display', serif;
-  font-size:clamp(2.4rem, 8vw, 3.2rem);
-  margin:0 0 24px;
-  line-height:1.12;
-  letter-spacing:.3px;
-  animation: titleReveal 1.4s ease forwards;
-}
-
-@keyframes titleReveal{
-  from{ opacity:0; transform:translateY(20px); }
-  to{ opacity:1; transform:translateY(0); }
+  font-size:2.6rem;
+  margin-bottom:20px;
 }
 
 .highlight{ color:var(--green); }
 
-/* --- Text --- */
 .subtitle{
   font-size:1.05rem;
-  line-height:1.65;
-  margin-bottom:42px;
-  color:#333;
-}
-
-#introText{
   margin-bottom:30px;
-  font-size:1rem;
-  color:#444;
 }
 
-/* --- Button --- */
 .btn{
   font-size:1.05rem;
   padding:14px 38px;
   background:#fff;
   border:2px solid var(--green);
   color:var(--green);
-  cursor:pointer;
   border-radius:10px;
-  transition:.25s ease;
-  box-shadow:0 10px 24px rgba(0,0,0,.1);
-}
-.btn:hover{
-  transform:translateY(-2px);
-  background:var(--green);
-  color:#fff;
+  cursor:pointer;
 }
 
-/* --- Countdown --- */
 .countdownBox{
   display:none;
-  margin-top:36px;
   font-size:3rem;
-  font-family:'Playfair Display', serif;
   color:var(--green);
-  animation:pulse 1.2s ease-in-out infinite;
+  margin-top:20px;
 }
 
-@keyframes pulse{
-  0%{ transform:scale(1); }
-  50%{ transform:scale(1.05); }
-  100%{ transform:scale(1); }
-}
-
-/* --- Video --- */
 video{
-  width:100%;
-  margin-top:36px;
   display:none;
-  border-radius:14px;
-  box-shadow:0 20px 50px rgba(0,0,0,.2);
+  width:100%;
+  margin-top:30px;
+  border-radius:12px;
 }
 
-/* --- Reveal --- */
 .reveal{
-  margin-top:38px;
+  display:none;
+  margin-top:30px;
   font-size:1.3rem;
   color:var(--green);
-  display:none;
-  line-height:1.5;
 }
 
-/* --- AR Button (anfangs versteckt) --- */
+/* --- AR Button --- */
 #arBtn{
   display:none;
   opacity:0;
   margin-top:40px;
-  transition:opacity .8s ease;
+  transition:opacity .6s ease;
 }
 
 /* --- AR Overlay --- */
@@ -169,12 +92,44 @@ video{
   inset:0;
   background:#000;
   z-index:9999;
+  overflow:hidden;
 }
 .ar.hidden{ display:none; }
 
+#cameraVideo{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* GIF Layer */
+#gifLayer{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.gif{
+  position:absolute;
+  width:90px;
+  pointer-events:none;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.4));
+}
+
+/* Bewegung rechts → links (unten) */
+@keyframes rightToLeft {
+  from{ transform:translateX(110vw); }
+  to{ transform:translateX(-150px); }
+}
+
+.gif.right-to-left{
+  bottom:8%;
+  animation: rightToLeft 6s linear forwards;
+}
+
 .ar-close{
   position:absolute;
-  bottom:24px;
+  bottom:20px;
   left:50%;
   transform:translateX(-50%);
 }
@@ -183,28 +138,15 @@ video{
 
 <body>
 
-<div class="trees">
-  <div class="tree small t1"></div>
-  <div class="tree t2"></div>
-  <div class="tree small t3"></div>
-  <div class="tree t4"></div>
-  <div class="tree small t5"></div>
-  <div class="tree t6"></div>
-</div>
-
 <div class="container">
-
   <h1>
     Frohe Weihnachten<br>
     <span class="highlight">Liebe Lynn!</span>
   </h1>
 
-  <p class="subtitle">
-    Ein kleiner Countdown –<br>
-    dann startet deine Videobotschaft.
-  </p>
+  <p class="subtitle">Ein kleiner Countdown – dann startet dein Video.</p>
 
-  <p id="introText"><em>Drück auf Play und lehn dich zurück.</em></p>
+  <p id="introText"><em>Drück auf Play</em></p>
 
   <button id="playBtn" class="btn">PLAY</button>
 
@@ -212,7 +154,7 @@ video{
     <span id="countdownNumber">10</span>
   </div>
 
-  <video id="giftVideo" controls preload="metadata" playsinline>
+  <video id="giftVideo" controls playsinline>
     <source src="lynn.mp4" type="video/mp4" />
   </video>
 
@@ -224,52 +166,132 @@ video{
   <button id="arBtn" class="btn">
     📷 AR Erlebnis starten
   </button>
-
 </div>
 
-<!-- Scripts -->
+<!-- AR Overlay -->
+<div id="arOverlay" class="ar hidden">
+  <video id="cameraVideo" autoplay playsinline></video>
+  <div id="gifLayer"></div>
+  <button id="closeAr" class="btn ar-close">✕ AR schließen</button>
+</div>
+
 <script>
-const countdownEl = document.getElementById('countdownNumber');
-const countdownBox = document.getElementById('countdownBox');
-const introText = document.getElementById('introText');
-const videoEl = document.getElementById('giftVideo');
 const playBtn = document.getElementById('playBtn');
+const countdownBox = document.getElementById('countdownBox');
+const countdownNumber = document.getElementById('countdownNumber');
+const videoEl = document.getElementById('giftVideo');
 const revealEl = document.getElementById('giftReveal');
 const arBtn = document.getElementById('arBtn');
 
 let timeLeft = 10;
-let active = false;
 
+// Countdown + Video
 playBtn.addEventListener('click', () => {
-  if(active) return;
-  active = true;
-
   playBtn.style.display = 'none';
-  introText.style.display = 'none';
   countdownBox.style.display = 'block';
 
   const timer = setInterval(() => {
     timeLeft--;
-    countdownEl.textContent = timeLeft;
+    countdownNumber.textContent = timeLeft;
 
     if(timeLeft <= 0){
       clearInterval(timer);
       countdownBox.style.display = 'none';
       videoEl.style.display = 'block';
-      videoEl.play().catch(()=>{});
+      videoEl.play();
     }
   }, 1000);
 });
 
+// Nach Video → AR Button zeigen
 videoEl.addEventListener('ended', () => {
   revealEl.style.display = 'block';
-
-  // AR Button anzeigen
   arBtn.style.display = 'inline-block';
   setTimeout(() => arBtn.style.opacity = 1, 50);
-
-  arBtn.scrollIntoView({behavior:'smooth', block:'center'});
 });
+
+/* ---------- AR + GIF LOGIC ---------- */
+const arOverlay = document.getElementById('arOverlay');
+const cameraVideo = document.getElementById('cameraVideo');
+const closeAr = document.getElementById('closeAr');
+const gifLayer = document.getElementById('gifLayer');
+
+let stream = null;
+let gifInterval = null;
+
+const gifs = [
+  'Random.gif',
+  'Random2.gif',
+  'Random3.gif',
+  'Left.gif',
+  'Right.gif',
+  'RightToLeft.gif'
+];
+
+// AR starten
+arBtn.addEventListener('click', async () => {
+  arOverlay.classList.remove('hidden');
+
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:'environment' },
+      audio:false
+    });
+    cameraVideo.srcObject = stream;
+
+    spawnGif();
+    gifInterval = setInterval(spawnGif, 2500);
+
+  }catch(err){
+    alert('Kamera konnte nicht gestartet werden');
+  }
+});
+
+// AR schließen
+closeAr.addEventListener('click', () => {
+  arOverlay.classList.add('hidden');
+  if(stream){
+    stream.getTracks().forEach(t => t.stop());
+  }
+  clearInterval(gifInterval);
+  gifLayer.innerHTML = '';
+});
+
+// GIF erzeugen
+function spawnGif(){
+  const file = gifs[Math.floor(Math.random() * gifs.length)];
+  const img = document.createElement('img');
+  img.src = file;
+  img.classList.add('gif');
+
+  if(file.toLowerCase().includes('righttoleft')){
+    img.classList.add('right-to-left');
+    img.style.left = '0';
+    setTimeout(() => img.remove(), 6500);
+  }
+  else if(file.toLowerCase().includes('left')){
+    img.style.left = '6%';
+    img.style.top = randomBetween(20, 70) + '%';
+  }
+  else if(file.toLowerCase().includes('right')){
+    img.style.right = '6%';
+    img.style.top = randomBetween(20, 70) + '%';
+  }
+  else{
+    img.style.left = randomBetween(5, 80) + '%';
+    img.style.top = randomBetween(10, 70) + '%';
+  }
+
+  gifLayer.appendChild(img);
+
+  if(!file.toLowerCase().includes('righttoleft')){
+    setTimeout(() => img.remove(), 3000);
+  }
+}
+
+function randomBetween(min, max){
+  return Math.random() * (max - min) + min;
+}
 </script>
 
 </body>
