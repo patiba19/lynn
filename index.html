@@ -78,7 +78,7 @@ video{
   color:var(--green);
 }
 
-/* --- AR Button --- */
+/* AR Button */
 #arBtn{
   display:none;
   opacity:0;
@@ -86,7 +86,7 @@ video{
   transition:opacity .6s ease;
 }
 
-/* --- AR Overlay --- */
+/* AR Overlay */
 .ar{
   position:fixed;
   inset:0;
@@ -112,11 +112,9 @@ video{
 .gif{
   position:absolute;
   width:90px;
-  pointer-events:none;
   filter: drop-shadow(0 6px 10px rgba(0,0,0,.4));
 }
 
-/* Bewegung rechts → links (unten) */
 @keyframes rightToLeft {
   from{ transform:translateX(110vw); }
   to{ transform:translateX(-150px); }
@@ -146,8 +144,6 @@ video{
 
   <p class="subtitle">Ein kleiner Countdown – dann startet dein Video.</p>
 
-  <p id="introText"><em>Drück auf Play</em></p>
-
   <button id="playBtn" class="btn">PLAY</button>
 
   <div id="countdownBox" class="countdownBox">
@@ -162,7 +158,6 @@ video{
     Kauf dir was Schönes 🎁
   </div>
 
-  <!-- AR Button -->
   <button id="arBtn" class="btn">
     📷 AR Erlebnis starten
   </button>
@@ -170,12 +165,13 @@ video{
 
 <!-- AR Overlay -->
 <div id="arOverlay" class="ar hidden">
-  <video id="cameraVideo" autoplay playsinline></video>
+  <video id="cameraVideo" autoplay playsinline muted></video>
   <div id="gifLayer"></div>
   <button id="closeAr" class="btn ar-close">✕ AR schließen</button>
 </div>
 
 <script>
+/* ---------------- VIDEO FLOW ---------------- */
 const playBtn = document.getElementById('playBtn');
 const countdownBox = document.getElementById('countdownBox');
 const countdownNumber = document.getElementById('countdownNumber');
@@ -185,7 +181,6 @@ const arBtn = document.getElementById('arBtn');
 
 let timeLeft = 10;
 
-// Countdown + Video
 playBtn.addEventListener('click', () => {
   playBtn.style.display = 'none';
   countdownBox.style.display = 'block';
@@ -203,14 +198,13 @@ playBtn.addEventListener('click', () => {
   }, 1000);
 });
 
-// Nach Video → AR Button zeigen
 videoEl.addEventListener('ended', () => {
   revealEl.style.display = 'block';
   arBtn.style.display = 'inline-block';
   setTimeout(() => arBtn.style.opacity = 1, 50);
 });
 
-/* ---------- AR + GIF LOGIC ---------- */
+/* ---------------- AR + CAMERA + GIFS ---------------- */
 const arOverlay = document.getElementById('arOverlay');
 const cameraVideo = document.getElementById('cameraVideo');
 const closeAr = document.getElementById('closeAr');
@@ -228,26 +222,30 @@ const gifs = [
   'RightToLeft.gif'
 ];
 
-// AR starten
 arBtn.addEventListener('click', async () => {
   arOverlay.classList.remove('hidden');
 
   try{
     stream = await navigator.mediaDevices.getUserMedia({
-      video:{ facingMode:'environment' },
+      video:{
+        facingMode:{ ideal:'environment' }
+      },
       audio:false
     });
+
     cameraVideo.srcObject = stream;
+    cameraVideo.muted = true;
+    cameraVideo.play().catch(()=>{});
 
     spawnGif();
     gifInterval = setInterval(spawnGif, 2500);
 
   }catch(err){
     alert('Kamera konnte nicht gestartet werden');
+    console.error(err);
   }
 });
 
-// AR schließen
 closeAr.addEventListener('click', () => {
   arOverlay.classList.add('hidden');
   if(stream){
@@ -257,7 +255,6 @@ closeAr.addEventListener('click', () => {
   gifLayer.innerHTML = '';
 });
 
-// GIF erzeugen
 function spawnGif(){
   const file = gifs[Math.floor(Math.random() * gifs.length)];
   const img = document.createElement('img');
@@ -271,15 +268,15 @@ function spawnGif(){
   }
   else if(file.toLowerCase().includes('left')){
     img.style.left = '6%';
-    img.style.top = randomBetween(20, 70) + '%';
+    img.style.top = rand(20,70)+'%';
   }
   else if(file.toLowerCase().includes('right')){
     img.style.right = '6%';
-    img.style.top = randomBetween(20, 70) + '%';
+    img.style.top = rand(20,70)+'%';
   }
   else{
-    img.style.left = randomBetween(5, 80) + '%';
-    img.style.top = randomBetween(10, 70) + '%';
+    img.style.left = rand(5,80)+'%';
+    img.style.top = rand(10,70)+'%';
   }
 
   gifLayer.appendChild(img);
@@ -289,8 +286,8 @@ function spawnGif(){
   }
 }
 
-function randomBetween(min, max){
-  return Math.random() * (max - min) + min;
+function rand(min,max){
+  return Math.random()*(max-min)+min;
 }
 </script>
 
