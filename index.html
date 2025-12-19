@@ -15,17 +15,15 @@
 
 *{ box-sizing:border-box; }
 
+/* --- BODY --- */
 body{
   margin:0;
   min-height:100vh;
   background:linear-gradient(#ffffff, var(--soft));
   font-family:'Montserrat', sans-serif;
   color:#111;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   text-align:center;
-  overflow:hidden;
+  overflow-x:hidden;
   animation: pageFade 1.2s ease forwards;
 }
 
@@ -66,9 +64,18 @@ body{
 .container{
   width:100%;
   max-width:520px;
+  margin:0 auto;
   padding:80px 24px 120px;
   position:relative;
   z-index:1;
+}
+
+/* Mobile Full Width */
+@media (max-width:768px){
+  .container{
+    max-width:100%;
+    padding:64px 16px 100px;
+  }
 }
 
 /* --- Headline --- */
@@ -78,7 +85,7 @@ h1{
   margin:0 0 24px;
   line-height:1.12;
   letter-spacing:.3px;
-  animation: titleReveal 1.4s ease forwards;
+  animation:titleReveal 1.4s ease forwards;
 }
 
 @keyframes titleReveal{
@@ -86,9 +93,7 @@ h1{
   to{ opacity:1; transform:translateY(0); }
 }
 
-.highlight{
-  color:var(--green);
-}
+.highlight{ color:var(--green); }
 
 /* --- Text --- */
 .subtitle{
@@ -96,14 +101,14 @@ h1{
   line-height:1.65;
   margin-bottom:42px;
   color:#333;
-  animation: fadeUp 1.6s ease forwards;
+  animation:fadeUp 1.6s ease forwards;
 }
 
 #introText{
   margin-bottom:30px;
   font-size:1rem;
   color:#444;
-  animation: fadeUp 1.8s ease forwards;
+  animation:fadeUp 1.8s ease forwards;
 }
 
 @keyframes fadeUp{
@@ -155,7 +160,17 @@ video{
   display:none;
   border-radius:14px;
   box-shadow:0 20px 50px rgba(0,0,0,.2);
-  animation: videoReveal 1.2s ease forwards;
+  animation:videoReveal 1.2s ease forwards;
+}
+
+/* Edge-to-Edge Video auf Mobile */
+@media (max-width:768px){
+  video{
+    border-radius:0;
+    margin-left:-16px;
+    margin-right:-16px;
+    width:calc(100% + 32px);
+  }
 }
 
 @keyframes videoReveal{
@@ -170,14 +185,11 @@ video{
   color:var(--green);
   display:none;
   line-height:1.5;
-  animation: glowIn 1.4s ease forwards;
+  animation:glowIn 1.4s ease forwards;
 }
 
 @keyframes glowIn{
-  from{
-    opacity:0;
-    text-shadow:none;
-  }
+  from{ opacity:0; }
   to{
     opacity:1;
     text-shadow:0 0 18px rgba(15,61,46,.25);
@@ -233,7 +245,6 @@ video{
   <div id="giftReveal" class="reveal">
     Kauf dir was Schönes!
   </div>
-
 
 </div>
 
