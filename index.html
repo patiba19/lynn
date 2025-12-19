@@ -36,14 +36,27 @@ body{
 .trees{
   position:fixed;
   bottom:0;
+  left:50%;
+  transform:translateX(-50%);
   width:100%;
+  max-width:520px;
   height:120px;
   opacity:.15;
+  pointer-events:none;
+  z-index:0;
 }
+
+@media (max-width:768px){
+  .trees{
+    max-width:100%;
+  }
+}
+
 .tree{
   position:absolute;
   bottom:0;
-  width:0; height:0;
+  width:0;
+  height:0;
   border-left:18px solid transparent;
   border-right:18px solid transparent;
   border-bottom:36px solid var(--green);
@@ -53,8 +66,9 @@ body{
   border-right:12px solid transparent;
   border-bottom:26px solid #9c5a22;
 }
-.tree.t1{ left:12%; }
-.tree.t2{ left:26%; }
+
+.tree.t1{ left:10%; }
+.tree.t2{ left:25%; }
 .tree.t3{ left:40%; }
 .tree.t4{ left:55%; }
 .tree.t5{ left:70%; }
@@ -65,16 +79,15 @@ body{
   width:100%;
   max-width:520px;
   margin:0 auto;
-  padding:80px 24px 120px;
+  padding:80px 24px 140px;
   position:relative;
   z-index:1;
 }
 
-/* Mobile Full Width */
 @media (max-width:768px){
   .container{
     max-width:100%;
-    padding:64px 16px 100px;
+    padding:64px 16px 120px;
   }
 }
 
@@ -133,9 +146,6 @@ h1{
   background:var(--green);
   color:#fff;
 }
-.btn:active{
-  transform:translateY(0);
-}
 
 /* --- Countdown --- */
 .countdownBox{
@@ -163,7 +173,6 @@ video{
   animation:videoReveal 1.2s ease forwards;
 }
 
-/* Edge-to-Edge Video auf Mobile */
 @media (max-width:768px){
   video{
     border-radius:0;
@@ -190,17 +199,7 @@ video{
 
 @keyframes glowIn{
   from{ opacity:0; }
-  to{
-    opacity:1;
-    text-shadow:0 0 18px rgba(15,61,46,.25);
-  }
-}
-
-/* --- Footer --- */
-.footer{
-  margin-top:70px;
-  font-size:.9rem;
-  color:#666;
+  to{ opacity:1; text-shadow:0 0 18px rgba(15,61,46,.25); }
 }
 </style>
 </head>
